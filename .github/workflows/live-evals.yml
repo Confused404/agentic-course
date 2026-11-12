@@ -1,0 +1,44 @@
+# Tier 2: live model evals. Costs money, so it only runs when YOU trigger it
+# (Actions tab -> live-evals -> Run workflow) or when a PR gets the `run-evals` label.
+# Add ANTHROPIC_API_KEY and OPENROUTER_API_KEY as repository secrets first.
+# Note: secrets are NOT passed to workflows triggered by PRs from forks. That's GitHub protecting you.
+name: live-evals
+on:
+  workflow_dispatch:
+    inputs:
+      node: { description: "Node number, e.g. 04", required: true }
+      budget: { description: "Hard cap in USD", required: true, default: "2.00" }
+      models: { description: "Comma-separated aliases (blank = node default)", required: false, default: "" }
+  pull_request:
+    types: [labeled]
+permissions:
+  contents: read
+jobs:
+  evals:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-evals'
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      # inputs go through env, never straight into the script (no shell injection via a crafted input)
+      IN_NODE: ${{ github.event.inputs.node }}
+      IN_BUDGET: ${{ github.event.inputs.budget }}
+      IN_MODELS: ${{ github.event.inputs.models }}
+      HEAD_REF: ${{ github.head_ref }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: |
+          uv venv --python 3.12 .venv
+          uv pip install --python .venv -e ".[dev,retrieval,mcp,frameworks]"
+          make seed
+      - name: Run live evals
+        run: |
+          N="$IN_NODE"
+          if [ -z "$N" ]; then N=$(echo "$HEAD_REF" | grep -oE 'node-[0-9]{2}' | head -1 | cut -d- -f2); fi
+          N=$(printf "%02d" "$((10#$N))")
+          case "$IN_BUDGET" in ''|*[!0-9.]*) B=2.00 ;; *) B="$IN_BUDGET" ;; esac
+          make eval N="$N" BUDGET="$B" MODELS="$IN_MODELS"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: eval-results, path: runs/ }
