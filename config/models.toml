@@ -1,0 +1,136 @@
+# Model aliases and prices. Prices are USD per million tokens, checked 2026-11-04.
+# Prices change often. `make models` re-checks which IDs exist and refreshes OpenRouter prices
+# into runs/openrouter_prices.json (which overrides this table when present).
+# Prices are keyed by model id (not provider:model). Models whose id ends in ":free" cost $0.
+#
+# Aliases are what course code uses: get_model("fast") etc. Swap the target to compare vendors
+# without touching code. That is the whole point of the adapter layer (Node 02 §4).
+#
+# WHICH TABLE APPLIES (agentlab/config.py::models_mode, shown by `make check-env`):
+#   COURSE_MODELS unset/"auto": "direct" if ANTHROPIC_API_KEY is set, else "free".
+#   free        [aliases] overridden by [aliases_free]: only OPENROUTER_API_KEY needed, $0, rate-limited.
+#   openrouter  [aliases] with Claude routed through OpenRouter ([aliases_openrouter]): one paid key for all.
+#   direct      [aliases] as written: Claude from Anthropic, everything else via OpenRouter.
+# Any single alias can be overridden from .env without editing this file:
+#   AGENTLAB_ALIAS_FAST=openrouter:openai/gpt-6-luna     (alias name upper-cased, "-" -> "_")
+
+[aliases]
+fast   = "anthropic:claude-haiku-5-5"
+mid    = "anthropic:claude-sonnet-5-5"
+top    = "anthropic:claude-opus-5-5"
+gpt-fast = "openrouter:openai/gpt-6-luna"
+gpt-mid  = "openrouter:openai/gpt-6.1-terra"
+open-hosted = "openrouter:qwen/qwen3.6-27b"      # open-weights model served by a paid host
+local  = "openrouter:google/gemma-4-31b-it:free"  # an open-weights model from a third vendor, free on OpenRouter
+ollama = "ollama:qwen3:8b"                        # opt-in: on your own machine (AGENTLAB_ALIAS_LOCAL=ollama:qwen3:8b)
+
+# Free mode: every role gets a free (":free") OpenRouter model that supports tool calling, from three different
+# vendors so cross-model comparisons still compare vendors. Free models rotate: `make models` flags dead ones.
+# There is no free equivalent of a frontier model: in free mode mid/top are the strongest free model available.
+[aliases_free]
+fast   = "openrouter:nvidia/nemotron-3.5-super-vl:free"
+mid    = "openrouter:nvidia/nemotron-3.5-super-vl:free"
+top    = "openrouter:nvidia/nemotron-3.5-super-vl:free"
+gpt-fast = "openrouter:xingchen-agi/xing4.0-29b-a4b:free"   # "a second vendor's fast model" in free mode
+gpt-mid  = "openrouter:google/gemma-4-31b-it:free"          # the judge: a different vendor from `fast`
+open-hosted = "openrouter:google/gemma-4-31b-it:free"
+
+# OpenRouter ids for the Claude aliases, used in "openrouter" mode.
+[aliases_openrouter]
+fast = "openrouter:anthropic/claude-haiku-5.5"
+mid  = "openrouter:anthropic/claude-sonnet-5.5"
+top  = "openrouter:anthropic/claude-opus-5.5"
+
+# OpenRouter server-side fallbacks (its `models` request field): if the first model errors (down, rate-limited
+# upstream), OpenRouter tries these in order. Keyed by model id. Free models need this most.
+[fallbacks]
+"nvidia/nemotron-3.5-super-vl:free" = ["google/gemma-4-31b-it:free", "xingchen-agi/xing4.0-29b-a4b:free"]
+"google/gemma-4-31b-it:free" = ["nvidia/nemotron-3.5-super-vl:free", "recursive/flint-v1.0:free"]
+"xingchen-agi/xing4.0-29b-a4b:free" = ["recursive/flint-v1.0:free", "google/gemma-4-31b-it:free"]
+
+# OpenRouter's limits for ":free" models (per account): 20 requests/minute; 50/day, or 1,000/day once you have
+# bought at least $10 of credits in total. The course paces free calls to stay under the per-minute limit.
+[free_tier]
+requests_per_minute = 18
+
+# The three models every cross-model comparison in the course uses by default.
+[matrix]
+default = ["fast", "gpt-fast", "local"]
+
+# Evals (Node 04): the judge should come from a DIFFERENT vendor than the models it grades where possible
+# (self-preference bias), and the simulated user should be cheap.
+[evals]
+judge = "gpt-mid"
+user_sim = "fast"
+
+[providers.anthropic]
+api_key_env = "ANTHROPIC_API_KEY"
+
+[providers.openrouter]
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+
+[providers.ollama]
+base_url = "http://localhost:11434/v1"
+api_key_env = ""          # none needed
+
+[providers.openai]
+base_url = "https://api.openai.com/v1"
+api_key_env = "OPENAI_API_KEY"
+
+# OpenRouter ids priced like the direct ids (so a Budget prices them even without `make models`).
+[price_aliases]
+"anthropic/claude-haiku-5.5" = "claude-haiku-5-5"
+"anthropic/claude-sonnet-5.5" = "claude-sonnet-5-5"
+"anthropic/claude-opus-5.5" = "claude-opus-5-5"
+
+# ---- prices: input, output, cache_read, cache_write (USD / 1M tokens)
+[prices."claude-haiku-5-5"]
+input = 0.10
+output = 0.50
+cache_read = 0.01
+cache_write = 0.125
+long_context_threshold = 100000   # prompts above this many tokens use the long_* prices
+long_input = 0.50
+long_output = 2.50
+long_cache_read = 0.05
+long_cache_write = 0.625
+
+[prices."claude-sonnet-5-5"]
+input = 2.00
+output = 10.00
+cache_read = 0.10
+cache_write = 2.50
+
+[prices."claude-opus-5-5"]
+input = 4.00
+output = 20.00
+cache_read = 0.20
+cache_write = 5.00
+
+[prices."openai/gpt-6-luna"]
+input = 0.10
+output = 0.50
+cache_read = 0.01
+cache_write = 0.10
+
+[prices."openai/gpt-6.1-terra"]
+input = 1.00
+output = 5.00
+cache_read = 0.05
+cache_write = 1.00
+
+[prices."qwen/qwen3.6-27b"]       # cheapest host at the time of writing; OpenRouter reports exact cost anyway
+input = 0.20
+output = 1.40
+
+# Charged when a model has no price above (fail closed: unknown != free). Deliberately expensive.
+[prices.default_unpriced]
+input = 10.0
+output = 50.0
+
+[prices."qwen3:8b"]
+input = 0.0
+output = 0.0
+cache_read = 0.0
+cache_write = 0.0
