@@ -1,0 +1,5 @@
+{"id": "chatcmpl-42", "object": "chat.completion", "model": "qwen3:8b",
+ "choices": [{"index": 0, "finish_reason": "stop",
+   "message": {"role": "assistant", "content": "", "tool_calls": [
+     {"id": "call_x", "index": 0, "type": "function", "function": {"name": "lookup_order", "arguments": "[4821]"}}]}}],
+ "usage": {"prompt_tokens": 210, "completion_tokens": 18, "total_tokens": 228}}
