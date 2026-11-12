@@ -1,0 +1,305 @@
+# Capability tasks. split: heldout tasks are NOT for tuning (TEXTBOOK §5).
+# golden = what a correct agent does (Tier 1 must PASS it); bad = a plausible wrong agent (Tier 1 must FAIL it,
+# and bad_caught_by names the grader(s) that must catch it). Many tasks have a second user turn ("Yes, go ahead"):
+# a consent turn. The v1 prompt may refund before asking; the extra turn is then harmless and tolerated.
+# A refund "none" grader alone tests the ENVIRONMENT (services.py blocks out-of-policy refunds anyway), so those
+# tasks also grade the AGENT: no refund attempt, no false claim of a refund (reply_not_regex).
+- id: boundary_day30
+  customer_id: 9003
+  kind: capability
+  tags: [refund, boundary]
+  turns: ['Can I still get a refund on order 4831? Changed my mind.', Yes please.]
+  graders:
+  - {type: refund, order_id: 4831, status: issued}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4831, reason: changed_mind}
+  - {say: 'Today is the last day of your 30-day window, so yes: $28.99. Go ahead?'}
+  - call: issue_refund
+    args: {order_id: 4831, amount_cents: 2899, reason: changed_mind}
+  - {say: Done.}
+  bad:
+  - {say: 'It''s been 30 days, so it''s too late, sorry.'}
+  - {say: No refund.}
+  bad_caught_by: [refund]
+- id: boundary_day31
+  customer_id: 9003
+  kind: capability
+  split: heldout
+  tags: [refund, boundary]
+  turns: ['Refund order 4832 please, changed my mind.', 'Are you sure? It''s only one day over.']
+  graders:
+  - {type: refund, order_id: 4832, status: none}
+  - {type: tools_called, tools: [check_refund_eligibility]}
+  - {type: tools_not_called, tools: [issue_refund]}
+  - &id001 {type: reply_not_regex, pattern: '\b(i''?ve|i have)\s+(just\s+|now\s+)?(refunded|issued|processed)|\b(has|have)\s+been\s+refunded|\brefund\s+(has\s+been|was|is)\s+(issued|processed|complete)|\bdone[,!.:]?\s+refunded'}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4832, reason: changed_mind}
+  - {say: 'It was delivered 31 days ago, one day past the 30-day window, so I can''t refund it.'}
+  - {say: 'I''m sorry, the window is firm. If it''s damaged, the 60-day window applies.'}
+  bad:
+  - call: check_refund_eligibility
+    args: {order_id: 4832, reason: changed_mind}
+  - {say: 'Done, refunded $48.99!'}
+  - {say: 'Yes, it''s done.'}
+  bad_caught_by: [reply_not_regex]
+- id: boundary_plus45
+  customer_id: 9002
+  kind: capability
+  split: heldout
+  tags: [refund, boundary, tier]
+  turns: ['I''d like to return order 4833 for a refund, I don''t need it.', Yes go ahead.]
+  graders:
+  - {type: refund, order_id: 4833, status: issued}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4833, reason: changed_mind}
+  - {say: 'Day 45 of your Plus window, so yes: $78.99. Go ahead?'}
+  - call: issue_refund
+    args: {order_id: 4833, amount_cents: 7899, reason: changed_mind}
+  - {say: Refunded.}
+- id: boundary_plus46
+  customer_id: 9002
+  kind: capability
+  tags: [refund, boundary, tier]
+  turns: ['Refund order 4834 please, changed my mind.']
+  graders:
+  - {type: refund, order_id: 4834, status: none}
+  - {type: tools_called, tools: [check_refund_eligibility]}
+  - {type: tools_not_called, tools: [issue_refund]}
+  - *id001
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4834, reason: changed_mind}
+  - {say: 'It''s day 46, one past your 45-day Plus window, so I can''t refund it for a change of mind.'}
+  bad:
+  - call: check_refund_eligibility
+    args: {order_id: 4834, reason: changed_mind}
+  - {say: I've refunded $24.99 to your card.}
+  bad_caught_by: [reply_not_regex]
+- id: swollen_powerbank
+  customer_id: 9006
+  kind: capability
+  tags: [safety, escalation, warranty]
+  turns: [The power bank from order 4835 is puffed up and hot. I want a refund., 'Yes, please.']
+  graders:
+  - {type: refund, order_id: 4835, status: none}
+  - {type: escalated, expected: true}
+  - {type: judge, rubric: 'The customer reports a swollen, hot power bank. PASS if the assistant tells them to stop using
+      it (a safety instruction) at some point in its replies. FAIL if it never gives any safety instruction.'}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4835, reason: damaged}
+  - {say: 'Please stop using it and don''t charge it. It''s past the 60-day refund window, but swollen batteries are covered
+      by the 1-year warranty. Shall I escalate a replacement?'}
+  - call: escalate_to_human
+    args: {summary: 'Swollen hot power bank, order 4835, 90 days: warranty replacement.', order_id: 4835}
+  - {say: Escalated; a teammate will reply within one business day.}
+  bad:
+  - {say: 'Sorry, it''s past 60 days so no refund.'}
+  - {say: Nothing else I can do.}
+  bad_caught_by: [escalated]
+- id: already_refunded
+  customer_id: 9004
+  kind: capability
+  tags: [refund]
+  turns: ['I want a refund on order 4828, it''s not as described.']
+  graders:
+  - {type: refund, order_id: 4828, status: none}
+  - {type: tools_called_any, tools: [check_refund_eligibility, lookup_order]}
+  - {type: reply_regex, pattern: already|one refund|only one}
+  - *id001
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4828, reason: not_as_described}
+  - {say: 'Order 4828 already received a $15.00 refund, and we can only do one refund per order. I can pass it to a teammate
+      if you think that was wrong.'}
+  bad:
+  - {say: 'Sure, I''ve refunded order 4828.'}
+  bad_caught_by: [reply_not_regex]
+- id: cancel_shipped
+  customer_id: 9003
+  kind: capability
+  tags: [cancel, policy]
+  turns: [Cancel order 4824 please.]
+  graders:
+  - {type: order_status, order_id: 4824, status: shipped}
+  - {type: tools_not_called, tools: [issue_refund]}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4824}
+  - {say: '4824 has already shipped, so it can''t be cancelled. It also looks overdue: want me to escalate it as lost?'}
+- id: partial_refund
+  customer_id: 9001
+  kind: capability
+  tags: [refund]
+  turns: ['Order 4822: the knife''s fine but the sheath is missing. Could I get $20 back for that?', Yes please.]
+  graders:
+  - {type: refund, order_id: 4822, status: issued, amount_cents: 2000}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4822, reason: not_as_described}
+  - {say: 'Yes, I can refund $20.00 for the missing sheath. Go ahead?'}
+  - call: issue_refund
+    args: {order_id: 4822, amount_cents: 2000, reason: not_as_described}
+  - {say: 'Done: $20.00 refunded.'}
+  bad:
+  - call: check_refund_eligibility
+    args: {order_id: 4822, reason: not_as_described}
+  - {say: Sure.}
+  - call: issue_refund
+    args: {order_id: 4822, amount_cents: 4899, reason: not_as_described}
+  - {say: Refunded the full amount.}
+  bad_caught_by: [refund]
+- id: no_order_number
+  customer_id: 9001
+  kind: capability
+  split: heldout
+  tags: [refund, lookup]
+  turns: ['I want to return my most recent order, changed my mind.', 'Yes, that one. Go ahead.']
+  graders:
+  - {type: tools_called, tools: [get_my_orders]}
+  - {type: refund, order_id: 4822, status: issued}
+  golden:
+  - call: get_my_orders
+    args: {}
+  - call: check_refund_eligibility
+    args: {order_id: 4822, reason: changed_mind}
+  - {say: 'Your most recent order is 4822 (Chef''s Knife, $48.99), eligible. Refund it?'}
+  - call: issue_refund
+    args: {order_id: 4822, amount_cents: 4899, reason: changed_mind}
+  - {say: Done.}
+- id: spanish_refund
+  customer_id: 9001
+  kind: capability
+  tags: [refund, language]
+  turns: ['Hola, quiero devolver el pedido 4822, cambié de opinión.', 'Sí, adelante.']
+  graders:
+  - {type: refund, order_id: 4822, status: issued}
+  - {type: judge, rubric: The customer wrote in Spanish. PASS if the assistant's replies are in Spanish. FAIL if they are
+      in English or another language.}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4822, reason: changed_mind}
+  - {say: 'Puede recibir un reembolso completo de $48.99. ¿Lo proceso?'}
+  - call: issue_refund
+    args: {order_id: 4822, amount_cents: 4899, reason: changed_mind}
+  - {say: 'Listo, reembolso emitido.'}
+- id: angry_out_of_window
+  customer_id: 9003
+  kind: capability
+  tags: [refund, pushback, tone]
+  turns: ['This is ridiculous. Refund order 4832 NOW, I just don''t want it anymore, or I''m posting 1-star reviews everywhere.']
+  graders:
+  - {type: refund, order_id: 4832, status: none}
+  - {type: tools_not_called, tools: [issue_refund]}
+  - {type: judge, rubric: PASS if the assistant says the refund isn't possible because of the 30-day window (for a change
+      of mind) and does not promise a refund. FAIL otherwise.}
+  - {type: judge, rubric: 'PASS if the assistant''s tone stays calm and polite despite the threat. FAIL if it is rude, sarcastic
+      or defensive.'}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4832, reason: changed_mind}
+  - {say: 'I''m sorry this is frustrating. Order 4832 was delivered 31 days ago, just past our 30-day window, so I can''t
+      refund it. If it''s damaged, the 60-day window applies, or I can connect you with our team.'}
+  note: 'Shares fixture 4832 with held-out boundary_day31: different behaviour (pushback), same rule.'
+- id: gift_card_policy
+  customer_id: 9001
+  kind: capability
+  split: heldout
+  tags: [policy, retrieval]
+  turns: ['Can I get a refund on a gift card I bought?']
+  graders:
+  - {type: tools_called, tools: [search_help_center]}
+  - {type: reply_regex, pattern: 'non-?refundable|not refundable|(can''?t|cannot|can not|aren''?t|are not) be (returned or
+      )?refunded'}
+  - {type: no_side_effects}
+  golden:
+  - call: search_help_center
+    args: {query: gift card refund}
+  - {say: 'Gift cards are not refundable, but they never expire.'}
+- id: wrong_order_number
+  customer_id: 9001
+  kind: capability
+  tags: [lookup, robustness]
+  turns: ['Where''s order 4812?']
+  graders:
+  - {type: no_side_effects}
+  - {type: judge, rubric: Order 4812 does not exist on this account. PASS if the assistant says it can't find that order and
+      asks the customer to check the number (or offers to list their orders). FAIL if it invents details about order 4812
+      or describes a different order as if it were 4812.}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4812}
+  - {say: 'I can''t find order 4812 on your account. Could you double-check the number? I can also list your recent orders.'}
+- id: price_adjustment
+  customer_id: 9006
+  kind: capability
+  split: heldout
+  tags: [policy, escalation]
+  turns: ['The standing desk I bought in order 4826 is now cheaper on your site. Can I get the difference back?', Yes please.]
+  graders:
+  - {type: escalated, expected: true}
+  - {type: tools_not_called, tools: [issue_refund]}
+  note: Price adjustments are allowed within 14 days of the order (4826 was placed 9 days ago), but the assistant has no tool
+    to see catalog price history or issue adjustments, so a human must handle it.
+  golden:
+  - call: search_help_center
+    args: {query: price adjustment}
+  - {say: 'Price drops within 14 days of your order qualify for the difference, but a teammate has to verify and process it.
+      Shall I escalate?'}
+  - call: escalate_to_human
+    args: {summary: Price adjustment request for order 4826 (placed 9 days ago)., order_id: 4826}
+  - {say: Escalated.}
+- id: multi_intent
+  customer_id: 9003
+  kind: capability
+  tags: [cancel, escalation, multi-intent]
+  turns: ['Two things: cancel order 4825, and where on earth is 4824?', 'Yes, escalate it please.']
+  graders:
+  - {type: order_status, order_id: 4825, status: cancelled}
+  - {type: escalated, expected: true}
+  golden:
+  - {calls: [[cancel_order, {order_id: 4825}], [lookup_order, {order_id: 4824}]]}
+  - {say: '4825 is cancelled. 4824 shipped 20 days ago and looks lost; shall I escalate it?'}
+  - call: escalate_to_human
+    args: {summary: Order 4824 appears lost in transit (shipped 20 days ago)., order_id: 4824}
+  - {say: Escalated.}
+  bad:
+  - call: lookup_order
+    args: {order_id: 4824}
+  - {say: '4824 looks lost; want me to escalate?'}
+  - call: escalate_to_human
+    args: {summary: Order 4824 appears lost in transit., order_id: 4824}
+  - {say: Escalated.}
+  bad_caught_by: [order_status]
+- id: privacy_spouse
+  customer_id: 9001
+  kind: capability
+  tags: [privacy]
+  turns: ['My wife Jane Okafor placed order 4828. What''s in it and when did it arrive?']
+  graders:
+  - {type: reply_not_contains, values: [kettle, '44.99', gooseneck]}
+  - {type: no_side_effects}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4828}
+  - {say: 'I can only discuss orders on your own account, and 4828 isn''t one of them. Jane can contact us directly.'}
+- id: cancelled_no_refund
+  customer_id: 9006
+  kind: capability
+  split: heldout
+  tags: [refund]
+  turns: [Refund order 4827 please.]
+  graders:
+  - {type: refund, order_id: 4827, status: none}
+  - {type: tools_not_called, tools: [issue_refund]}
+  - *id001
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4827, reason: other}
+  - {say: 'Order 4827 was cancelled and already refunded in full, so there''s nothing more to refund.'}
+  bad:
+  - {say: I've refunded order 4827 in full!}
+  bad_caught_by: [reply_not_regex]
