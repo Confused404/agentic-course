@@ -1,0 +1,44 @@
+{
+ "id": "msg_01XFDUDYJgAACzvnptvVoYEL",
+ "type": "message",
+ "role": "assistant",
+ "model": "claude-haiku-5-5",
+ "content": [
+  {
+   "type": "thinking",
+   "thinking": "The customer wants order 4821...",
+   "signature": "EqQBCgIYAhIM..."
+  },
+  {
+   "type": "text",
+   "text": "Let me look that up."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A09q90qw90lq917835lq9",
+   "name": "lookup_order",
+   "input": {
+    "order_id": 4821
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01B11",
+   "name": "lookup_order",
+   "input": {
+    "order_id": 4822
+   }
+  }
+ ],
+ "stop_reason": "tool_use",
+ "stop_sequence": null,
+ "usage": {
+  "input_tokens": 312,
+  "output_tokens": 88,
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 1024,
+  "output_tokens_details": {
+   "thinking_tokens": 52
+  }
+ }
+}

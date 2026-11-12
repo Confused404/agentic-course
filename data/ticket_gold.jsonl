@@ -1,0 +1,240 @@
+{"ticket_id": 1, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 2, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 3, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 4, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 5, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 6, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 7, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 8, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 9, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 10, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 11, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 12, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 13, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 14, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 15, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 16, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 17, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 18, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 19, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 20, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 21, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 22, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 23, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 24, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 25, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 26, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 27, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 28, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 29, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 30, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 31, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 32, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 33, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 34, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 35, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 36, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 37, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 38, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 39, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 40, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 41, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 42, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 43, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 44, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 45, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 46, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 47, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 48, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 49, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 50, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 51, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 52, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 53, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 54, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 55, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 56, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 57, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 58, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 59, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 60, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 61, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 62, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 63, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 64, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 65, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 66, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 67, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 68, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 69, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 70, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 71, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 72, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 73, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 74, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 75, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 76, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 77, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 78, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 79, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 80, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 81, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 82, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 83, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 84, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 85, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 86, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 87, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 88, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 89, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 90, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 91, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 92, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 93, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 94, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 95, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 96, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 97, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 98, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 99, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 100, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 101, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 102, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 103, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 104, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 105, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 106, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 107, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 108, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 109, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 110, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 111, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 112, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 113, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 114, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 115, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 116, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 117, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 118, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 119, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 120, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 121, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 122, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 123, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 124, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 125, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 126, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 127, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 128, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 129, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 130, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 131, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 132, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 133, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 134, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 135, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 136, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 137, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 138, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 139, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 140, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 141, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 142, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 143, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 144, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 145, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 146, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 147, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 148, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 149, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 150, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 151, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 152, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 153, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 154, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 155, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 156, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 157, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 158, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 159, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 160, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 161, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 162, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 163, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 164, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 165, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 166, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 167, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 168, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 169, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 170, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 171, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 172, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 173, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 174, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 175, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 176, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 177, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 178, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 179, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 180, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 181, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 182, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 183, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 184, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 185, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 186, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 187, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 188, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 189, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 190, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 191, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 192, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 193, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 194, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 195, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 196, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 197, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 198, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 199, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 200, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 201, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 202, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 203, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 204, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 205, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 206, "category": "complaint_escalation", "priority": "high", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 207, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 208, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 209, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 210, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": false, "hard": false}
+{"ticket_id": 211, "category": "damaged_item", "priority": "normal", "secondary": ["product_question"], "ambiguous": false, "hard": true, "note": "multi-intent; damage dominates"}
+{"ticket_id": 212, "category": "shipping_status", "priority": "normal", "secondary": [], "ambiguous": true, "hard": true, "note": "no order number"}
+{"ticket_id": 213, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": "French"}
+{"ticket_id": 214, "category": "shipping_status", "priority": "normal", "secondary": ["complaint_escalation"], "ambiguous": false, "hard": true, "note": "Spanish; lost package"}
+{"ticket_id": 215, "category": "damaged_item", "priority": "high", "secondary": [], "ambiguous": false, "hard": true, "note": "safety issue without the word 'swollen'"}
+{"ticket_id": 216, "category": "refund_request", "priority": "normal", "secondary": ["complaint_escalation"], "ambiguous": true, "hard": true, "note": "angry but no legal threat"}
+{"ticket_id": 217, "category": "complaint_escalation", "priority": "high", "secondary": ["refund_request"], "ambiguous": true, "hard": true, "note": "billing error"}
+{"ticket_id": 218, "category": "account", "priority": "normal", "secondary": [], "ambiguous": true, "hard": true, "note": "privacy: must not disclose"}
+{"ticket_id": 219, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": "two questions, one intent"}
+{"ticket_id": 220, "category": "account", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": "privacy request"}
+{"ticket_id": 221, "category": "product_question", "priority": "normal", "secondary": ["refund_request"], "ambiguous": true, "hard": true, "note": "points at archived article contradiction"}
+{"ticket_id": 222, "category": "spam", "priority": "low", "secondary": ["complaint_escalation"], "ambiguous": true, "hard": true, "note": "prompt injection inside a ticket"}
+{"ticket_id": 223, "category": "refund_request", "priority": "normal", "secondary": ["product_question"], "ambiguous": true, "hard": true, "note": "exchange (no exchange category)"}
+{"ticket_id": 224, "category": "shipping_status", "priority": "normal", "secondary": ["damaged_item"], "ambiguous": false, "hard": true, "note": "delivered-but-missing"}
+{"ticket_id": 225, "category": "spam", "priority": "low", "secondary": [], "ambiguous": true, "hard": true, "note": "not spam, but no action needed"}
+{"ticket_id": 226, "category": "damaged_item", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": "contains PII"}
+{"ticket_id": 227, "category": "complaint_escalation", "priority": "normal", "secondary": [], "ambiguous": true, "hard": true, "note": "press inquiry"}
+{"ticket_id": 228, "category": "cancellation", "priority": "normal", "secondary": [], "ambiguous": true, "hard": true, "note": "one word, no order"}
+{"ticket_id": 229, "category": "product_question", "priority": "normal", "secondary": ["damaged_item"], "ambiguous": true, "hard": true, "note": "probably dimmer compatibility, not a defect"}
+{"ticket_id": 230, "category": "refund_request", "priority": "normal", "secondary": ["complaint_escalation"], "ambiguous": false, "hard": true, "note": "cancellation refund follow-up"}
+{"ticket_id": 231, "category": "shipping_status", "priority": "normal", "secondary": ["product_question"], "ambiguous": true, "hard": true, "note": "pre-sale shipping question"}
+{"ticket_id": 232, "category": "complaint_escalation", "priority": "high", "secondary": ["refund_request"], "ambiguous": false, "hard": true, "note": "threat + out-of-window refund"}
+{"ticket_id": 233, "category": "product_question", "priority": "normal", "secondary": ["damaged_item"], "ambiguous": true, "hard": true, "note": "troubleshooting (motor cooldown), not necessarily a defect"}
+{"ticket_id": 234, "category": "refund_request", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": "terse"}
+{"ticket_id": 235, "category": "shipping_status", "priority": "normal", "secondary": ["account"], "ambiguous": true, "hard": true, "note": "order change"}
+{"ticket_id": 236, "category": "account", "priority": "high", "secondary": ["complaint_escalation"], "ambiguous": false, "hard": true, "note": "possible fraud"}
+{"ticket_id": 237, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": false, "hard": true, "note": ""}
+{"ticket_id": 238, "category": "product_question", "priority": "normal", "secondary": [], "ambiguous": true, "hard": true, "note": "sales lead"}
+{"ticket_id": 239, "category": "spam", "priority": "low", "secondary": [], "ambiguous": false, "hard": true, "note": "injection probe"}
+{"ticket_id": 240, "category": "damaged_item", "priority": "normal", "secondary": ["product_question"], "ambiguous": true, "hard": true, "note": "no damage yet"}

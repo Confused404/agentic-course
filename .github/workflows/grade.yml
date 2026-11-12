@@ -1,0 +1,42 @@
+# Tier 1 grader: runs on every PR and push. Offline, free, deterministic (scripted fake models).
+# It answers "does my control flow do the right thing?" Model QUALITY is measured by Tier 2
+# (live-evals.yml), which you trigger on purpose. See nodes/04-evals/TEXTBOOK.md.
+name: grade
+on:
+  pull_request:
+  push:
+    branches: [main, "solution/**"]
+permissions:
+  contents: read
+jobs:
+  protected-paths:
+    # Mechanical backstop for AGENTS.md rule 3: a coding agent (or a tired human) editing tests, gold labels or
+    # seeded-bug files fails the build. If a SPEC really requires it, add the PR label `allow-protected`.
+    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'allow-protected')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Fail if protected paths changed
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          BAD=$(echo "$CHANGED" | grep -E '^(nodes/[^/]+/tests/|shopfront/tests/|data/|shopfront/seed\.py|shopfront/(schema\.sql|FIXTURES\.md|content/)|agentlab/llm/(types|fake)\.py|(.*/)?conftest\.py$|(.*/)?(\.?pytest\.ini|tox\.ini|setup\.cfg)$|pyproject\.toml|Makefile|\.github/)' || true)
+          if [ -n "$BAD" ]; then echo "Protected paths changed (see AGENTS.md rule 3):"; echo "$BAD"; exit 1; fi
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Install
+        run: |
+          uv venv --python 3.12 .venv
+          uv pip install --python .venv -e ".[dev]"
+          uv pip install --python .venv -e ".[retrieval,mcp,frameworks]" || echo "optional extras failed"
+      - name: Seed
+        run: make seed
+      - name: Grade every node up to the one this branch is about (catches regressions)
+        run: |
+          BR="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          N=$(echo "$BR" | grep -oE 'node-[0-9]{2}' | head -1 | cut -d- -f2)
+          if [ -z "$N" ]; then echo "Branch has no node-NN in its name: Shopfront checks only."; make check; exit 0; fi
+          make grade-upto N=$N

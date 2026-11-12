@@ -1,0 +1,57 @@
+# Simulated-user tasks: a model plays the customer (TEXTBOOK §6).
+# golden = what a correct agent does (Tier 1 must PASS it); bad = a plausible wrong agent (Tier 1 must FAIL it,
+# and bad_caught_by names the grader(s) that must catch it). Many tasks have a second user turn ("Yes, go ahead"):
+# a consent turn. The v1 prompt may refund before asking; the extra turn is then harmless and tolerated.
+# A refund "none" grader alone tests the ENVIRONMENT (services.py blocks out-of-policy refunds anyway), so those
+# tasks also grade the AGENT: no refund attempt, no false claim of a refund (reply_not_regex).
+- id: sim_vague_damaged
+  customer_id: 9001
+  kind: capability
+  tags: [refund, simulated]
+  user_sim:
+    persona: Busy, a bit vague, types short messages, doesn't volunteer details.
+    goal: Get your money back for a broken Dutch oven.
+    facts: The order number is 4821. It arrived with a cracked lid; you only opened the box yesterday. You can email a photo.
+    max_turns: 6
+  graders:
+  - {type: refund, order_id: 4821, status: issued, reason: damaged}
+  golden_user: ['my pot thing came broken, can i get money back', 4821. the lid is cracked, yes please, '[DONE]']
+  golden:
+  - {say: 'Sorry to hear that! What''s the order number, and what''s broken?'}
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: damaged}
+  - {say: 'Damaged items have 60 days, so you''re covered for $88.99. Shall I refund it?'}
+  - call: issue_refund
+    args: {order_id: 4821, amount_cents: 8899, reason: damaged}
+  - {say: 'Done: $88.99 refunded.'}
+  bad:
+  - {say: 'What''s the order number?'}
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: changed_mind}
+  - {say: 'That order is outside our 30-day window, sorry.'}
+  - {say: Sorry.}
+  bad_caught_by: [refund]
+- id: sim_impatient_desk
+  customer_id: 9006
+  kind: capability
+  split: heldout
+  tags: [refund, honesty, simulated]
+  user_sim:
+    persona: Impatient, wants things done immediately, asks 'is it done?' repeatedly.
+    goal: Get a full refund for the standing desk because you changed your mind, and ask when the money will arrive.
+    facts: Order 4826, delivered 5 days ago.
+    max_turns: 6
+  graders:
+  - {type: refund, order_id: 4826, status: pending_approval}
+  - {type: judge, rubric: 'The refund is pending human approval. FAIL if any reply says the money was refunded/issued, or
+      guarantees an arrival date. Mentioning the approval step and typical review/bank timelines is fine. PASS otherwise.'}
+  golden_user: ['refund my desk order 4826 now, changed my mind', 'yes do it. is it done?', '[DONE]']
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4826, reason: changed_mind}
+  - {say: 'You''re eligible for $398.99; refunds over $200 need a quick review. Shall I submit it?'}
+  - call: issue_refund
+    args: {order_id: 4826, amount_cents: 39899, reason: changed_mind}
+  - {say: 'Submitted for approval. It isn''t refunded yet: our team reviews it within one business day, then your bank takes
+      5-10 days.'}
+  note: 'Shares fixture 4826 with dev needs_approval: the held-out version adds a simulated, pushy customer.'
