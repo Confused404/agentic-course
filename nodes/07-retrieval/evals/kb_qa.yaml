@@ -1,0 +1,301 @@
+# Knowledge-base QA (Node 07). Each question has:
+#   gold: the documents that contain the answer (for retrieval metrics: recall@k, MRR, nDCG). Any ONE of them is
+#         enough to answer unless the type is multi_hop or aggregate, where the answer needs several.
+#   graders: on the final answer. answer_regex / answer_not_regex (case-insensitive, on normalised text);
+#            abstains (the answer says it doesn't know / it isn't in the knowledge base); cites_any (cites one of
+#            the listed doc ids as [doc-id]).
+#   type: lookup · identifier (SKUs, codes) · paraphrase (the question shares few words with the answer) ·
+#         stale (an ARCHIVED near-duplicate gives a different, wrong answer) · multi_hop · aggregate (needs many
+#         documents) · unanswerable (the KB doesn't say).
+# Archived traps: product-<SKU>-2024/-2025 (heavier, older warranties), warranty-2024, plus-membership-2024,
+# help-returns-policy-2025.
+
+- id: tent3_weight
+  type: stale
+  question: How much does the 3-person Trailhead tent weigh?
+  gold: [product-OUT-0015, guide-choosing-a-tent]
+  graders:
+  - {type: answer_regex, pattern: '2\.4 ?kg'}
+  - {type: answer_not_regex, pattern: '2\.83|2\.59'}
+- id: warranty_gan
+  type: stale
+  question: How long is the warranty on the 65 W GaN wall charger?
+  gold: [product-ELE-0051, help-warranty]
+  graders:
+  - {type: answer_regex, pattern: '\b(1|one) year'}
+  - {type: answer_not_regex, pattern: '6 months|six months'}
+- id: return_window
+  type: stale
+  question: I changed my mind about something I bought. How long do I have to get a refund?
+  gold: [help-refund-policy]
+  graders:
+  - {type: answer_regex, pattern: '\b30\b'}
+  - {type: answer_not_regex, pattern: 'within \W*14 days'}
+- id: plus_price
+  type: stale
+  question: How much does a Plus membership cost per year?
+  gold: [help-plus-membership]
+  graders:
+  - {type: answer_regex, pattern: '\$49\b'}
+  - {type: answer_not_regex, pattern: '\$39\b'}
+- id: plus_window
+  type: stale
+  split: heldout
+  question: How many days do Plus members get to request a refund?
+  gold: [help-refund-policy, help-plus-membership]
+  graders:
+  - {type: answer_regex, pattern: '\b45\b'}
+  - {type: answer_not_regex, pattern: '\b40\b'}
+- id: damaged_window
+  type: lookup
+  question: How long after delivery can I report an item that arrived damaged?
+  gold: [help-refund-policy, help-damaged-items]
+  graders:
+  - {type: answer_regex, pattern: '\b60\b'}
+- id: kit0011_capacity
+  type: identifier
+  question: What's the capacity of KIT-0011?
+  gold: [product-KIT-0011]
+  graders:
+  - {type: answer_regex, pattern: '1\.2 ?l'}
+- id: ele0048_flight
+  type: identifier
+  question: Can I take ELE-0048 on a plane?
+  gold: [product-ELE-0048]
+  graders:
+  - {type: answer_regex, pattern: 'carry[- ]on|cabin|hand luggage'}
+- id: hom0036_weight_limit
+  type: identifier
+  split: heldout
+  question: What's the maximum monitor weight for HOM-0036?
+  gold: [product-HOM-0036]
+  graders:
+  - {type: answer_regex, pattern: '\b9 ?kg'}
+- id: kettle_e1
+  type: lookup
+  question: My pour-over kettle's display says E1. What should I do?
+  gold: [product-KIT-0010, product-KIT-0011, troubleshoot-kettle]
+  graders:
+  - {type: answer_regex, pattern: 'empty|dry|fill'}
+- id: desk_e2
+  type: lookup
+  question: The control panel on my standing desk shows E2.
+  gold: [product-HOM-0030, product-HOM-0031, product-HOM-0032, help-standing-desk-setup]
+  graders:
+  - {type: answer_regex, pattern: 'sync|reset|lowest'}
+- id: dimmer_buzz
+  type: paraphrase
+  question: When I turn the dimmer down, my new bulbs blink and hum. How do I stop that?
+  gold: [help-led-bulbs, product-LIG-0039, product-LIG-0040]
+  graders:
+  - {type: answer_regex, pattern: 'trailing[- ]edge|elv|low[- ]end trim'}
+- id: smartbulb_wifi
+  type: paraphrase
+  question: My smart light can't see my home internet during setup.
+  gold: [troubleshoot-smart-bulb, product-LIG-0041, product-LIG-0042]
+  graders:
+  - {type: answer_regex, pattern: '2\.4'}
+- id: monitor_sinking
+  type: paraphrase
+  question: My screen slowly sinks down on its mount over the day.
+  gold: [product-HOM-0035, product-HOM-0036, handbook-home-office]
+  graders:
+  - {type: answer_regex, pattern: 'tension|spring'}
+- id: headlamp_in_bag
+  type: paraphrase
+  split: heldout
+  question: My head torch keeps switching itself on inside my rucksack.
+  gold: [troubleshoot-headlamp]
+  graders:
+  - {type: answer_regex, pattern: 'lock'}
+- id: chair_sinks
+  type: paraphrase
+  question: My office chair slowly lowers itself while I sit. Is that covered?
+  gold: [product-HOM-0033, product-HOM-0034]
+  graders:
+  - {type: answer_regex, pattern: '5[- ]year|five[- ]year|frame warranty|is covered|are covered'}
+  - {type: answer_not_regex, pattern: "not covered|isn't covered"}
+- id: filter_virus
+  type: lookup
+  question: Will the squeeze filter make water safe from viruses?
+  gold: [product-OUT-0028, product-OUT-0029, guide-water-treatment]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|doesn't|does not|won't"}
+  - {type: answer_regex, pattern: 'boil|chemical|treat'}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: filter_frozen
+  type: paraphrase
+  question: I left my water filter in the car overnight and it was well below zero. Can I keep using it?
+  gold: [product-OUT-0028, product-OUT-0029, guide-water-treatment, handbook-outdoor]
+  graders:
+  - {type: answer_regex, pattern: 'replace'}
+- id: skillet_sticky
+  type: lookup
+  question: My new cast iron skillet feels sticky. Is it faulty?
+  gold: [product-KIT-0001, product-KIT-0002, product-KIT-0003]
+  graders:
+  - {type: answer_regex, pattern: 'oven|230|seasoning'}
+- id: knife_dishwasher
+  type: lookup
+  question: Can the chef's knife go in the dishwasher?
+  gold: [product-KIT-0006, product-KIT-0007, handbook-kitchen]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|hand[- ]wash"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: cable_video
+  type: lookup
+  split: heldout
+  question: Can I use the braided USB-C cable to connect my laptop to an external monitor?
+  gold: [product-ELE-0049, product-ELE-0050]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|usb 2|doesn't|does not"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: arc_bulb
+  type: lookup
+  question: Does the arc floor lamp come with a bulb?
+  gold: [product-LIG-0043, product-LIG-0044]
+  graders:
+  - {type: answer_regex, pattern: "not included|\\bno\\b|doesn't|does not"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: desk_max_height
+  type: lookup
+  question: What's the maximum height of the standing desk?
+  gold: [product-HOM-0030, product-HOM-0031, product-HOM-0032]
+  graders:
+  - {type: answer_regex, pattern: '127'}
+- id: price_match
+  type: lookup
+  question: Another store sells the same backpack cheaper. Will you match their price?
+  gold: [help-price-adjustments]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|don't|do not"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: powerbank_laptop
+  type: lookup
+  question: Will the 20000 mAh power bank charge my laptop, which normally uses a 90 W charger?
+  gold: [product-ELE-0048, guide-usb-c-power]
+  graders:
+  - {type: answer_regex, pattern: '30 ?w'}
+  - {type: answer_regex, pattern: "slow|\\bnot\\b|won't|isn't"}
+- id: stove_fuel_canada
+  type: lookup
+  question: I'm in Canada. Can you ship me fuel canisters for the camp stove?
+  gold: [ops-carrier-cutoffs, help-international-shipping, product-OUT-0021, product-OUT-0022]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|don't|do not|can't|cannot"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: order_cutoff
+  type: lookup
+  question: If I order at 3pm on a Tuesday, when will it ship?
+  gold: [ops-carrier-cutoffs]
+  graders:
+  - {type: answer_regex, pattern: 'next business day|wednesday'}
+- id: tray_desk_50mm
+  type: lookup
+  split: heldout
+  question: My desk top is 50 mm thick. Will the under-desk cable tray clamps fit it?
+  gold: [product-HOM-0037, product-HOM-0038]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|won't|45"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: bag_for_zero_c
+  type: multi_hop
+  question: I'll be camping at around 0°C and I sleep cold. Which of your sleeping bags should I buy?
+  gold: [guide-sleeping-bag-ratings, product-OUT-0023]
+  graders:
+  - {type: answer_regex, pattern: '-5 ?°? ?c|minus 5|−5'}
+- id: tent_snow
+  type: lookup
+  question: Is the 2-person tent OK for a winter trip with snow?
+  gold: [product-OUT-0014, guide-choosing-a-tent]
+  graders:
+  - {type: answer_regex, pattern: "\\bno\\b|\\bnot\\b|3-season|three-season"}
+  - {type: answer_not_regex, pattern: '^(yes|sure)\b'}
+- id: lifetime_warranty
+  type: aggregate
+  question: Which of your products have a lifetime warranty?
+  gold: [product-KIT-0001, product-KIT-0002, product-KIT-0003, product-KIT-0004, product-KIT-0005,
+         help-warranty, handbook-kitchen]
+  graders:
+  - {type: answer_regex, pattern: 'skillet'}
+  - {type: answer_regex, pattern: 'dutch oven'}
+- id: discontinued
+  type: aggregate
+  question: Which products have been discontinued?
+  gold: [product-KIT-0005, product-OUT-0024]
+  graders:
+  - {type: answer_regex, pattern: 'dutch oven'}
+  - {type: answer_regex, pattern: 'sleeping bag'}
+- id: ip65_products
+  type: aggregate
+  question: Which of your products are rated IP65?
+  gold: [product-LIG-0045, product-LIG-0046]
+  graders:
+  - {type: answer_regex, pattern: 'string lights'}
+- id: summit_sizes
+  type: aggregate
+  split: heldout
+  question: What sizes does the Summit Backpack come in?
+  gold: [product-OUT-0016, product-OUT-0017, product-OUT-0018]
+  graders:
+  - {type: answer_regex, pattern: '35'}
+  - {type: answer_regex, pattern: '50'}
+  - {type: answer_regex, pattern: '65'}
+- id: usb_laptop_full_speed
+  type: multi_hop
+  question: Will your 100 W GaN charger with the 1 m braided USB-C cable charge a large laptop at full speed?
+  gold: [product-ELE-0052, product-ELE-0049, guide-usb-c-power]
+  graders:
+  - {type: answer_regex, pattern: '^yes|\byes\b'}
+  - {type: answer_regex, pattern: '100 ?w'}
+- id: five_year_frame
+  type: aggregate
+  question: Which of your products have a 5-year warranty on the frame?
+  gold: [product-HOM-0030, product-HOM-0031, product-HOM-0032, product-HOM-0033, product-HOM-0034,
+         product-HOM-0035, product-HOM-0036, product-HOM-0037, product-HOM-0038, help-warranty,
+         handbook-home-office]
+  graders:
+  - {type: answer_regex, pattern: 'desk'}
+  - {type: answer_regex, pattern: 'chair'}
+  - {type: answer_regex, pattern: 'monitor arm'}
+  - {type: answer_regex, pattern: 'cable tray'}
+- id: usb_c_cable_in_box
+  type: aggregate
+  split: heldout
+  question: Which products come with a USB-C cable in the box?
+  gold: [product-OUT-0026, product-OUT-0027, product-ELE-0047, product-ELE-0048, product-ELE-0053,
+         product-ELE-0054, handbook-outdoor, handbook-electronics-accessories]
+  graders:
+  - {type: answer_regex, pattern: 'headlamp'}
+  - {type: answer_regex, pattern: 'power bank|voltpack'}
+  - {type: answer_regex, pattern: 'charging pad|wireless'}
+- id: unans_bicycles
+  type: unanswerable
+  question: Do you sell bicycles?
+  gold: []
+  graders:
+  - {type: abstains}
+  - {type: answer_not_regex, pattern: '\$\d'}
+- id: unans_student_discount
+  type: unanswerable
+  question: Is there a student discount code?
+  gold: []
+  graders:
+  - {type: abstains}
+  - {type: answer_not_regex, pattern: '\$\d'}
+- id: unans_duffel_denier
+  type: unanswerable
+  split: heldout
+  question: What denier is the nylon on the 60 L duffel bag?
+  gold: []
+  graders:
+  - {type: abstains}
+  - {type: answer_not_regex, pattern: '\$\d'}
+  - {type: answer_not_regex, pattern: '\b\d{2,3} ?d\b'}
+- id: unans_tent_color
+  type: unanswerable
+  question: What colours does the Trailhead tent come in?
+  gold: []
+  graders:
+  - {type: abstains}
+  - {type: answer_not_regex, pattern: '\$\d'}

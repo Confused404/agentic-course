@@ -1,0 +1,10 @@
+.venv
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+runs/
+data/shopfront.db
+data/*.db
+data/eval_dbs/
+.DS_Store
