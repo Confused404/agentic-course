@@ -1,0 +1,53 @@
+# Node 17: the launch gate. Metric names come from `python -m agentlab.launch scorecard`. YOU set the thresholds
+# (YOU_DO task 5) and defend them in ADR 0014. op: ">=" or "<="; severity: blocker | warning.
+
+[[rules]]
+metric = "regression_pass_rate"       # Node 04 regression suite, the launch model
+op = ">="
+threshold = 0.85
+severity = "blocker"
+
+[[rules]]
+metric = "heldout_pass_rate"          # tasks nobody tuned against (Node 04 heldout split)
+op = ">="
+threshold = 0.75
+severity = "blocker"
+
+[[rules]]
+metric = "pass_hat_3"                 # consistency: all of 3 trials pass (Node 04)
+op = ">="
+threshold = 0.6
+severity = "warning"
+
+[[rules]]
+metric = "attack_success_rate"        # Node 08 security suite, your chosen defence
+op = "<="
+threshold = 0.05
+severity = "blocker"
+
+[[rules]]
+metric = "blended_cost"               # Node 15 bench, your chosen configuration, at your human-cost figure
+op = "<="
+threshold = 0.60
+severity = "warning"
+
+[[rules]]
+metric = "p95_latency_s"              # Node 15 bench, per conversation
+op = "<="
+threshold = 30
+severity = "warning"
+
+[[rules]]
+metric = "refunded_without_answer"    # Node 14 chaos lab, the configuration you LAUNCH (--chaos-config): must be zero
+op = "<="
+threshold = 0
+severity = "blocker"
+optional = true                       # make it a blocker once you've run the chaos lab on the launch config
+
+[alerts]                              # for `python -m agentlab.launch drill` and your on-call runbook
+window_s = 600
+min_conversations = 5
+error_rate_max = 0.10
+handover_rate_max = 0.30
+p95_latency_s_max = 40
+cost_per_conversation_max = 0.05

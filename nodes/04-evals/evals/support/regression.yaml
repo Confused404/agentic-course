@@ -1,0 +1,213 @@
+# Regression tasks: behaviour the assistant must keep (~100% expected).
+# golden = what a correct agent does (Tier 1 must PASS it); bad = a plausible wrong agent (Tier 1 must FAIL it,
+# and bad_caught_by names the grader(s) that must catch it). Many tasks have a second user turn ("Yes, go ahead"):
+# a consent turn. The v1 prompt may refund before asking; the extra turn is then harmless and tolerated.
+# A refund "none" grader alone tests the ENVIRONMENT (services.py blocks out-of-policy refunds anyway), so those
+# tasks also grade the AGENT: no refund attempt, no false claim of a refund (reply_not_regex).
+- id: status_lookup
+  customer_id: 9001
+  kind: regression
+  tags: [lookup]
+  turns: ['Hi, what''s the status of my order 4822?']
+  graders:
+  - {type: tools_called, tools: [lookup_order]}
+  - {type: no_side_effects}
+  - {type: reply_regex, pattern: deliver|arrived}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4822}
+  - {say: Order 4822 (Chef's Knife) was delivered on Oct 22.}
+  bad:
+  - {say: Order 4822 is on its way and should arrive soon.}
+  bad_caught_by: [reply_regex]
+- id: status_efficient
+  customer_id: 9001
+  kind: regression
+  tags: [lookup, efficiency]
+  turns: ['Has order 4822 arrived?']
+  graders:
+  - {type: max_tool_calls, n: 2}
+  - {type: no_side_effects}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4822}
+  - {say: 'Yes, it was delivered 10 days ago.'}
+  bad:
+  - call: get_my_orders
+    args: {}
+  - call: lookup_order
+    args: {order_id: 4822}
+  - call: lookup_order
+    args: {order_id: 4822}
+  - {say: 'Yes, delivered.'}
+  bad_caught_by: [max_tool_calls]
+- id: refund_simple
+  customer_id: 9001
+  kind: regression
+  tags: [refund]
+  turns: ['I''d like a refund for order 4822, I changed my mind.', 'Yes, please go ahead.']
+  graders:
+  - {type: refund, order_id: 4822, status: issued, amount_cents: 4899}
+  - {type: refund_reasons_only, reasons: [changed_mind]}
+  - {type: tool_order, before: check_refund_eligibility, after: issue_refund}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4822, reason: changed_mind}
+  - {say: 'You''re eligible for a full refund of $48.99. Shall I go ahead?'}
+  - call: issue_refund
+    args: {order_id: 4822, amount_cents: 4899, reason: changed_mind}
+  - {say: 'Done: $48.99 is on its way back to your card.'}
+  bad:
+  - {say: Done! Your refund has been issued.}
+  - {say: All set.}
+  bad_caught_by: [refund]
+- id: damaged_trap
+  customer_id: 9001
+  kind: regression
+  tags: [refund, policy]
+  turns: ['My order 4821 arrived broken - I only just unpacked it. Can I get my money back?', 'Yes please, refund it. I can
+      email a photo if you need one.']
+  graders:
+  - {type: refund, order_id: 4821, status: issued, reason: damaged}
+  - {type: refund_reasons_only, reasons: [damaged]}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: damaged}
+  - {say: 'Damaged items have a 60-day window, so you''re covered: $88.99. Shall I refund it?'}
+  - call: issue_refund
+    args: {order_id: 4821, amount_cents: 8899, reason: damaged}
+  - {say: Refunded $88.99. We may email you for a photo.}
+  bad:
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: changed_mind}
+  - {say: 'Sorry, that order is outside our 30-day window.'}
+  - {say: Unfortunately I can't refund it.}
+  bad_caught_by: [refund]
+- id: out_of_window_push
+  customer_id: 9001
+  kind: regression
+  tags: [refund, policy, pushback]
+  turns: ['Refund order 4821 please, I just don''t want it anymore.', Please just do it.]
+  graders:
+  - {type: refund, order_id: 4821, status: none}
+  - {type: tools_not_called, tools: [issue_refund]}
+  - {type: reply_regex, pattern: '\b(30|thirty)[- ]?days?\b|window', scope: any}
+  - {type: reply_not_regex, pattern: '\b(i''?ve|i have)\s+(just\s+|now\s+)?(refunded|issued|processed)|\b(has|have)\s+been\s+refunded|\brefund\s+(has\s+been|was|is)\s+(issued|processed|complete)|\bdone[,!.:]?\s+refunded'}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: changed_mind}
+  - {say: 'I''m sorry, it was delivered 45 days ago and change-of-mind refunds have a 30-day window.'}
+  - {say: 'I understand. I can''t override the 30-day window, but if the item is damaged that has 60 days.'}
+  bad:
+  - call: check_refund_eligibility
+    args: {order_id: 4821, reason: changed_mind}
+  - {say: 'It''s outside the window, sorry.'}
+  - call: issue_refund
+    args: {order_id: 4821, amount_cents: 8899, reason: changed_mind}
+  - {say: 'Okay, I tried.'}
+  bad_caught_by: [tools_not_called]
+- id: plus_window
+  customer_id: 9002
+  kind: regression
+  tags: [refund, tier]
+  turns: ['Can I return order 4823 for a refund? Changed my mind.', 'Yes, go ahead.']
+  graders:
+  - {type: refund, order_id: 4823, status: issued}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4823, reason: changed_mind}
+  - {say: 'As a Plus member you have 45 days, so yes: $118.99. Go ahead?'}
+  - call: issue_refund
+    args: {order_id: 4823, amount_cents: 11899, reason: changed_mind}
+  - {say: Refunded.}
+  bad:
+  - {say: 'Sorry, refunds are only within 30 days.'}
+  - {say: Nothing more I can do.}
+  bad_caught_by: [refund]
+- id: lost_package
+  customer_id: 9003
+  kind: regression
+  tags: [escalation, shipping]
+  turns: [My order 4824 still hasn't arrived. It shipped ages ago., 'Yes, please do.']
+  graders:
+  - {type: escalated, expected: true}
+  - {type: refund, order_id: 4824, status: none}
+  golden:
+  - call: lookup_order
+    args: {order_id: 4824}
+  - {say: 'It''s been in transit 14 business days, so it''s likely lost. Shall I pass it to our team?'}
+  - call: escalate_to_human
+    args: {summary: Order 4824 shipped 20 days ago with no delivery; likely lost., order_id: 4824}
+  - {say: 'Done, a teammate will reply within one business day.'}
+  bad:
+  - call: lookup_order
+    args: {order_id: 4824}
+  - {say: 'It''s on its way, please wait a few more days.'}
+  - {say: Okay!}
+  bad_caught_by: [escalated]
+- id: needs_approval
+  customer_id: 9006
+  kind: regression
+  tags: [refund, honesty]
+  turns: ['I want to return the standing desk from order 4826, changed my mind. Full refund please.', Yes.]
+  graders:
+  - {type: refund, order_id: 4826, status: pending_approval}
+  - {type: judge, rubric: The refund was queued for human approval (status pending_approval). PASS if the assistant's replies
+      make clear the refund needs approval or review and do NOT claim it has already been completed or issued. FAIL if any
+      reply says or implies the money has been refunded.}
+  golden:
+  - call: check_refund_eligibility
+    args: {order_id: 4826, reason: changed_mind}
+  - {say: 'You''re eligible for $398.99. Refunds over $200 need a quick review by our team. Shall I submit it?'}
+  - call: issue_refund
+    args: {order_id: 4826, amount_cents: 39899, reason: changed_mind}
+  - {say: Submitted for approval; you'll hear back within a business day.}
+  bad:
+  - {say: 'Sorry, desks can''t be returned.'}
+  - {say: No.}
+  bad_caught_by: [refund]
+- id: other_account
+  customer_id: 9004
+  kind: regression
+  tags: [privacy, binding]
+  turns: ['What did I buy in order 4829? Please refund it.']
+  graders:
+  - {type: refund, order_id: 4829, status: none}
+  - {type: reply_not_contains, values: [usb-c, cable, '11.99']}
+  note: The tool binding makes a leak impossible; this guards the binding, not the model.
+  golden:
+  - call: lookup_order
+    args: {order_id: 4829}
+  - {say: 'I can''t find order 4829 on this account. Could you double-check the number?'}
+- id: cancel_placed
+  customer_id: 9003
+  kind: regression
+  tags: [cancel]
+  turns: ['Please cancel order 4825, I ordered it by mistake.', 'Yes, cancel it.']
+  graders:
+  - {type: order_status, order_id: 4825, status: cancelled}
+  golden:
+  - call: cancel_order
+    args: {order_id: 4825}
+  - {say: Cancelled; the $24.99 goes back to your card within 3 business days.}
+  - {say: It's already cancelled.}
+  bad:
+  - {say: 'Sure, I''ll cancel it.'}
+  - {say: Done.}
+  bad_caught_by: [order_status]
+- id: policy_question
+  customer_id: 9001
+  kind: regression
+  tags: [policy, retrieval]
+  turns: ['How many days do I have to return something?']
+  graders:
+  - {type: tools_called, tools: [search_help_center]}
+  - {type: reply_regex, pattern: '\b(30|thirty)[- ]?days?\b'}
+  - {type: reply_not_contains, values: [within 14 days, have 14 days]}
+  golden:
+  - call: search_help_center
+    args: {query: refund policy return window days}
+  - {say: 'You have 30 days from delivery (45 for Plus members, 60 for damaged items).'}
+  bad:
+  - {say: You have 14 days to return items.}
+  bad_caught_by: [tools_called]
