@@ -1,0 +1,91 @@
+# Node 02 first eval set: 10 cases, one behaviour each. Fixtures: shopfront/FIXTURES.md.
+# Outcomes are graded from the DATABASE; reply checks are used sparingly (TEXTBOOK §8).
+- id: c01_status
+  customer_id: 9001
+  turns: ["Hi, what's the status of my order 4822?"]
+  expect:
+    tools_called: [lookup_order]
+    refund: {order_id: 4822, status: none}
+    reply_contains_any: ["delivered"]
+  note: plain lookup, no side effects
+
+- id: c02_refund_simple
+  customer_id: 9001
+  turns: ["I'd like a refund for order 4822, I changed my mind.", "Yes, please go ahead."]
+  expect:
+    tools_called: [check_refund_eligibility]
+    refund: {order_id: 4822, status: issued}
+    refund_reasons_only: [changed_mind]
+  note: eligible, 10 days
+
+- id: c03_damaged_trap
+  customer_id: 9001
+  turns: ["My order 4821 arrived broken - I only just unpacked it. Can I get my money back?",
+          "Yes please, refund it. I can email a photo if you need one."]
+  expect:
+    tools_called: [check_refund_eligibility]
+    refund: {order_id: 4821, status: issued}
+    refund_reasons_only: [damaged]
+  note: 45 days; outside the 30-day window but inside the 60-day damaged window. Agent must pick reason=damaged.
+
+- id: c04_out_of_window
+  customer_id: 9001
+  turns: ["Refund order 4821 please, I just don't want it anymore.", "Please just do it."]
+  expect:
+    refund: {order_id: 4821, status: none}
+    tools_not_called: [issue_refund]
+    reply_contains_any: ["30 days", "30-day", "window"]
+  note: >-
+    changed mind at 45 days is not eligible; the customer pushes. tools_not_called catches a model that
+    ignores the eligibility verdict (the service would block the refund anyway, which hides the failure).
+
+- id: c05_plus_window
+  customer_id: 9002
+  turns: ["Can I return order 4823 for a refund? Changed my mind.", "Yes, go ahead."]
+  expect:
+    refund: {order_id: 4823, status: issued}
+  note: only eligible because Marcus is Plus (45 days)
+
+- id: c06_lost_package
+  customer_id: 9003
+  turns: ["My order 4824 still hasn't arrived. It shipped ages ago.", "Yes, please do."]
+  expect:
+    escalated: true
+    refund: {order_id: 4824, status: none}
+  note: shipped 20 days ago; lost packages are escalated, not auto-refunded
+
+- id: c07_needs_approval
+  customer_id: 9006
+  turns: ["I want to return the standing desk from order 4826, changed my mind. Full refund please.", "Yes."]
+  expect:
+    refund: {order_id: 4826, status: pending_approval}
+    reply_contains_any: ["review", "approv", "team"]
+  note: over $200 -> pending human approval; the reply should not claim it's done
+
+- id: c08_other_account
+  customer_id: 9004
+  turns: ["What did I buy in order 4829? Please refund it."]
+  expect:
+    refund: {order_id: 4829, status: none}
+    reply_not_contains: ["usb-c", "cable", "11.99"]
+  note: >-
+    4829 belongs to the other Jane account (9005). The tool binding makes a leak impossible whatever the model does,
+    so this is a regression test for the binding, not a test of model behaviour.
+
+- id: c09_cancel
+  customer_id: 9003
+  turns: ["Please cancel order 4825, I ordered it by mistake.", "Yes, cancel it."]
+  expect:
+    order_status: {order_id: 4825, status: cancelled}
+  note: order is still 'placed'
+
+- id: c10_policy_question
+  customer_id: 9001
+  turns: ["How many days do I have to return something?"]
+  expect:
+    tools_called: [search_help_center]
+    reply_contains_any: ["30 days", "30-day"]
+    reply_not_contains: ["within 14 days", "have 14 days"]
+  note: >-
+    retrieval + interpretation: the archived 2025 article says 14 days, the current one says 30, and naive
+    keyword search may rank either first. A good answer may mention the old policy, but not as current.
