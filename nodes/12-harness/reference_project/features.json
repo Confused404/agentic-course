@@ -1,0 +1,7 @@
+[
+  {"id": "F1", "title": "Percentage coupons with minimum spend", "status": "todo", "attempts": 0, "notes": ""},
+  {"id": "F2", "title": "Buy-X-get-Y coupons", "status": "todo", "attempts": 0, "notes": ""},
+  {"id": "F3", "title": "Stacking rules", "status": "todo", "attempts": 0, "notes": ""},
+  {"id": "F4", "title": "Expiry", "status": "todo", "attempts": 0, "notes": ""},
+  {"id": "F5", "title": "explain CLI", "status": "todo", "attempts": 0, "notes": ""}
+]
