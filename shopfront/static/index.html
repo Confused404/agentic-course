@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopfront</title>
+<style>
+  :root { --ink:#1d1d1f; --muted:#6e6e73; --line:#e5e5ea; --accent:#2f6f4f; }
+  * { box-sizing: border-box; } body { font: 15px/1.5 system-ui, sans-serif; margin:0; color:var(--ink); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; }
+  header b { font-size:18px; } input, button { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; }
+  button { background:var(--accent); color:#fff; border:none; cursor:pointer; }
+  main { display:grid; grid-template-columns: 1fr 360px; gap:20px; padding:20px; }
+  .card { border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; }
+  .muted { color:var(--muted); font-size:13px; } #log { height:420px; overflow:auto; }
+  .me { text-align:right; } .bot { color:var(--accent); }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header><b>Shopfront</b><input id="q" placeholder="Search products"><button onclick="search()">Search</button></header>
+<main>
+  <section id="results"></section>
+  <aside class="card">
+    <b>Support assistant</b>
+    <div class="muted">Customer id <input id="cid" value="9001" size="6"></div>
+    <div id="log"></div>
+    <form onsubmit="send(event)"><input id="msg" placeholder="Ask about an order…" style="width:75%"> <button>Send</button></form>
+  </aside>
+</main>
+<script>
+async function search(){
+  const q = document.getElementById('q').value;
+  const r = await fetch('/api/products?q='+encodeURIComponent(q)); const items = await r.json();
+  // product data comes from our own DB (trusted-ish); still escape in real apps
+  document.getElementById('results').innerHTML = items.map(p =>
+    `<div class="card"><b>${p.name}</b> <span class="muted">${p.category}</span><br>$${(p.price_cents/100).toFixed(2)}</div>`).join('') || '<p class="muted">No results</p>';
+}
+async function send(e){
+  // textContent, never innerHTML, for anything a user or a model wrote: model output can carry
+  // attacker text from reviews (Node 08). Rendering markdown/HTML safely is a Node 17 topic.
+  e.preventDefault(); const log = document.getElementById('log'); const m = document.getElementById('msg');
+  const add = (cls, text) => { const p = document.createElement('p'); p.className = cls; p.textContent = text; log.appendChild(p); };
+  add('me', m.value);
+  const r = await fetch('/api/assistant/chat', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({customer_id: +document.getElementById('cid').value, message: m.value})});
+  const data = await r.json(); m.value = '';
+  add('bot', data.reply ?? JSON.stringify(data.detail)); log.scrollTop = 1e9;
+}
+search();
+</script>
+</body>
+</html>
